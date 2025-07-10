@@ -111,9 +111,9 @@ export class UploadService {
 }
   private getS3() {
     return new S3({
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID || s3Config.AWS_ACCESS_KEY,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || s3Config.AWS_SECRET_ACCESS_KEY,
-      region: process.env.AWS_REGION || s3Config.AWS_REGION,
+      accessKeyId: process.env.ACCESS_KEY_ID || s3Config.AWS_ACCESS_KEY,
+      secretAccessKey: process.env.SECRET_ACCESS_KEY || s3Config.AWS_SECRET_ACCESS_KEY,
+      region: process.env.REGION || s3Config.AWS_REGION,
     });
   }
 }
