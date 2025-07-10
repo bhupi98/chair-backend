@@ -24,7 +24,7 @@ const MongoConfig = config.get("db");
   imports: [
     MongooseModule.forRootAsync({
       useFactory: async () => ({
-        uri: MongoConfig.url,
+        uri:  process.env.MONGO_URL,
         dbName:"FixCrew",
         connectionFactory: (connection) => {
           console.log('MongoDB Connected');

@@ -5,7 +5,7 @@ const jwtConfig = config.get('jwt');
 @Injectable()
 export class EncryptionService {
   private readonly algorithm = 'aes-256-cbc'; // Encryption algorithm
-  private readonly key = jwtConfig.secretcrypto // 32 bytes key (for aes-256-cbc)
+  private readonly key = process.env.SECRETCRYPTO  // 32 bytes key (for aes-256-cbc)
   private readonly ivLength = 16; // AES block size for IV
 
   // Encrypt method: Encrypts plain text to encrypted string
