@@ -10,7 +10,6 @@ exports.AuthModule = void 0;
 const common_1 = require("@nestjs/common");
 const passport_1 = require("@nestjs/passport");
 const jwt_1 = require("@nestjs/jwt");
-const config = require("config");
 ;
 const mongoose_1 = require("@nestjs/mongoose");
 const auth_controller_1 = require("../controllers/auth.controller");
@@ -25,7 +24,6 @@ const SkillsService_1 = require("../services/SkillsService");
 const Skills_1 = require("../schemas/Skills");
 const upload_controller_1 = require("../controllers/upload.controller");
 const UploadService_1 = require("../services/UploadService");
-const jwtConfig = config.get("jwt");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -39,7 +37,7 @@ exports.AuthModule = AuthModule = __decorate([
             ]),
             passport_1.PassportModule.register({ defaultStrategy: "jwt" }),
             jwt_1.JwtModule.register({
-                secret: process.env.JWT_SECRET || jwtConfig.secret,
+                secret: process.env.JWT_SECRET
             }),
             axios_1.HttpModule.register({
                 timeout: 5000,

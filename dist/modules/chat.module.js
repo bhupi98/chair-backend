@@ -11,7 +11,6 @@ const common_1 = require("@nestjs/common");
 const chat_gateway_1 = require("../chat/chat.gateway");
 const passport_1 = require("@nestjs/passport");
 const jwt_1 = require("@nestjs/jwt");
-const config = require("config");
 ;
 const mongoose_1 = require("@nestjs/mongoose");
 const jwt_strategy_1 = require("../jwt.strategy");
@@ -22,7 +21,6 @@ const Roster_1 = require("../schemas/Roster");
 const device_validation_service_1 = require("../services/device-validation.service");
 const OfflineDataModule_1 = require("./OfflineDataModule");
 const Chatlist_1 = require("../schemas/Chatlist");
-const jwtConfig = config.get("jwt");
 let ChatModule = class ChatModule {
 };
 exports.ChatModule = ChatModule;
@@ -36,7 +34,7 @@ exports.ChatModule = ChatModule = __decorate([
             ]),
             passport_1.PassportModule.register({ defaultStrategy: "jwt" }),
             jwt_1.JwtModule.register({
-                secret: process.env.JWT_SECRET || jwtConfig.secret,
+                secret: process.env.JWT_SECRET
             }),
             axios_1.HttpModule.register({
                 timeout: 5000,

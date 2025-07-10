@@ -23,8 +23,8 @@ import { ResendOtpBody } from 'src/dto/ResendOtpBody';
 import { handleMongoOperation } from 'src/mongo-utils';
 import { Twilio } from 'twilio';
 import { ProfileUpdateDto } from 'src/dto/ProfileUpdateDto';
-const TwilioConfig = config.get('twilio');
-const jwtConfig = config.get('jwt');
+// const TwilioConfig = config.get('twilio');
+//const jwtConfig = config.get('jwt');
 const BLOCK_DURATION_HOURS = 24;
 const MAX_ATTEMPTS = 5;
 @Injectable()
@@ -38,10 +38,10 @@ export class AuthService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {
     this.client = new Twilio(
-      TwilioConfig.TWILIO_ACCOUNT_SID,
-      TwilioConfig.TWILIO_AUTH_TOKEN,
+      process.env.TWILIO_ACCOUNT_SID,
+      process.env.TWILIO_AUTH_TOKEN,
     );
-    this.verifySid = TwilioConfig.TWILIO_VERIFY_SID;
+    this.verifySid = process.env.TWILIO_VERIFY_SID;
   }
   async verifyOtp(verifyOtpBody: VerifyOtpBody): Promise<any> {
     const user = await this.userModel.findOne({
@@ -85,10 +85,10 @@ export class AuthService {
     };
     const accessToken = this.jwtService.sign(payload, {
       expiresIn: '7d',
-      secret: jwtConfig.secret,
+      secret: process.env.JWT_SECRET,
     }); // Short-lived
     const refreshToken = this.jwtService.sign(payload, {
-      secret: jwtConfig.secret,
+      secret: process.env.JWT_SECRET,
       expiresIn: '365d', // Long-lived refresh token
     });
     user.jwtToken = accessToken;
@@ -108,7 +108,7 @@ export class AuthService {
   }
   async generateAccessToken(payload) {
     return this.jwtService.sign(payload, {
-      secret: jwtConfig.secret,
+      secret: process.env.JWT_SECRET,
     });
   }
   async refreshAccessToken(userId: any) {
@@ -119,7 +119,7 @@ export class AuthService {
       ).toObject();
      
       const payload = await this.jwtService.verifyAsync(user.refreshToken, {
-        secret: jwtConfig.secret,
+        secret: process.env.JWT_SECRET,
       });
      
       if (!user) {
@@ -245,7 +245,7 @@ export class AuthService {
     try {
       console.log('token', token);
       const user = await this.jwtService.verifyAsync(token, {
-        secret: jwtConfig.secret,
+        secret: process.env.JWT_SECRET,
       });
       return user;
     } catch (error) {

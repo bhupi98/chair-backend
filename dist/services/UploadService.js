@@ -9,12 +9,10 @@ var UploadService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UploadService = void 0;
 const common_1 = require("@nestjs/common");
-const config = require("config");
 const path = require("path");
 const aws_sdk_1 = require("aws-sdk");
 const uuid = require("uuid");
-const s3Config = config.get('aws').get('s3');
-const bucket = process.env.AWS_BUCKET || s3Config.AWS_BUCKET;
+const bucket = process.env.AWS_BUCKET;
 let UploadService = UploadService_1 = class UploadService {
     constructor() {
         this.logger = new common_1.Logger(UploadService_1.name);
@@ -101,9 +99,9 @@ let UploadService = UploadService_1 = class UploadService {
     }
     getS3() {
         return new aws_sdk_1.S3({
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID || s3Config.AWS_ACCESS_KEY,
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || s3Config.AWS_SECRET_ACCESS_KEY,
-            region: process.env.AWS_REGION || s3Config.AWS_REGION,
+            accessKeyId: process.env.ACCESS_KEY_ID,
+            secretAccessKey: process.env.SECRET_ACCESS_KEY,
+            region: process.env.REGION
         });
     }
 };

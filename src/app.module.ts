@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import {MongooseModule} from "@nestjs/mongoose";
-import * as config from "config";
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { HttpModule } from '@nestjs/axios';
+import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth.module';
 
 import { ChatModule } from './modules/chat.module';
@@ -19,13 +19,16 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { OrderModule } from './modules/Order.module';
 
 
-const MongoConfig = config.get("db");
+// const MongoConfig = config.get("db");
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,            // makes env vars available app-wide
+      envFilePath: '.env',      // load .env file
+    }),
     MongooseModule.forRootAsync({
       useFactory: async () => ({
         uri:  process.env.MONGO_URL,
-        dbName:"FixCrew",
         connectionFactory: (connection) => {
           console.log('MongoDB Connected');
           return connection;

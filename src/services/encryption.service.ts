@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as crypto from 'crypto';
 import * as config from 'config';
-const jwtConfig = config.get('jwt');
 @Injectable()
 export class EncryptionService {
   private readonly algorithm = 'aes-256-cbc'; // Encryption algorithm

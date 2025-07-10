@@ -16,7 +16,6 @@ exports.AuthService = void 0;
 const axios_1 = require("@nestjs/axios");
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
-const config = require("config");
 const mongoose_2 = require("mongoose");
 const user_schema_1 = require("../schemas/user.schema");
 const jwt_1 = require("@nestjs/jwt");
@@ -24,8 +23,6 @@ const mongoose = require("mongoose");
 const device_validation_service_1 = require("./device-validation.service");
 const mongo_utils_1 = require("../mongo-utils");
 const twilio_1 = require("twilio");
-const TwilioConfig = config.get('twilio');
-const jwtConfig = config.get('jwt');
 const BLOCK_DURATION_HOURS = 24;
 const MAX_ATTEMPTS = 5;
 let AuthService = class AuthService {
@@ -34,8 +31,8 @@ let AuthService = class AuthService {
         this.httpService = httpService;
         this.deviceValidationService = deviceValidationService;
         this.userModel = userModel;
-        this.client = new twilio_1.Twilio(TwilioConfig.TWILIO_ACCOUNT_SID, TwilioConfig.TWILIO_AUTH_TOKEN);
-        this.verifySid = TwilioConfig.TWILIO_VERIFY_SID;
+        this.client = new twilio_1.Twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+        this.verifySid = process.env.TWILIO_VERIFY_SID;
     }
     async verifyOtp(verifyOtpBody) {
         const user = await this.userModel.findOne({
@@ -66,10 +63,10 @@ let AuthService = class AuthService {
         };
         const accessToken = this.jwtService.sign(payload, {
             expiresIn: '7d',
-            secret: jwtConfig.secret,
+            secret: process.env.JWT_SECRET,
         });
         const refreshToken = this.jwtService.sign(payload, {
-            secret: jwtConfig.secret,
+            secret: process.env.JWT_SECRET,
             expiresIn: '365d',
         });
         user.jwtToken = accessToken;
@@ -87,7 +84,7 @@ let AuthService = class AuthService {
     }
     async generateAccessToken(payload) {
         return this.jwtService.sign(payload, {
-            secret: jwtConfig.secret,
+            secret: process.env.JWT_SECRET,
         });
     }
     async refreshAccessToken(userId) {
@@ -95,7 +92,7 @@ let AuthService = class AuthService {
             console.log('userId', userId);
             const user = (await this.userModel.findById(userId).select('refreshToken')).toObject();
             const payload = await this.jwtService.verifyAsync(user.refreshToken, {
-                secret: jwtConfig.secret,
+                secret: process.env.JWT_SECRET,
             });
             if (!user) {
                 throw new common_1.UnauthorizedException('User not found');
@@ -160,7 +157,7 @@ let AuthService = class AuthService {
         try {
             console.log('token', token);
             const user = await this.jwtService.verifyAsync(token, {
-                secret: jwtConfig.secret,
+                secret: process.env.JWT_SECRET,
             });
             return user;
         }

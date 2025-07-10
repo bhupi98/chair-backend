@@ -22,7 +22,7 @@ import { UploadService } from "src/services/UploadService";
 
 
 
-const jwtConfig = config.get("jwt");
+
 
 
 @Module({
@@ -38,7 +38,7 @@ const jwtConfig = config.get("jwt");
         ]),
         PassportModule.register({defaultStrategy: "jwt"}),
         JwtModule.register({
-            secret: process.env.JWT_SECRET || jwtConfig.secret,
+            secret: process.env.JWT_SECRET
            
         }),
         HttpModule.register({

@@ -11,10 +11,10 @@ const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const mongoose_1 = require("@nestjs/mongoose");
-const config = require("config");
 const throttler_1 = require("@nestjs/throttler");
 const core_1 = require("@nestjs/core");
 const axios_1 = require("@nestjs/axios");
+const config_1 = require("@nestjs/config");
 const auth_module_1 = require("./modules/auth.module");
 const chat_module_1 = require("./modules/chat.module");
 const core_2 = require("@nestjs/core");
@@ -22,17 +22,19 @@ const GlobalExceptionFilter_1 = require("./GlobalExceptionFilter");
 const OfflineDataModule_1 = require("./modules/OfflineDataModule");
 const schedule_1 = require("@nestjs/schedule");
 const Order_module_1 = require("./modules/Order.module");
-const MongoConfig = config.get("db");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            config_1.ConfigModule.forRoot({
+                isGlobal: true,
+                envFilePath: '.env',
+            }),
             mongoose_1.MongooseModule.forRootAsync({
                 useFactory: async () => ({
-                    uri: MongoConfig.url,
-                    dbName: "FixCrew",
+                    uri: process.env.MONGO_URL,
                     connectionFactory: (connection) => {
                         console.log('MongoDB Connected');
                         return connection;

@@ -9,12 +9,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EncryptionService = void 0;
 const common_1 = require("@nestjs/common");
 const crypto = require("crypto");
-const config = require("config");
-const jwtConfig = config.get('jwt');
 let EncryptionService = class EncryptionService {
     constructor() {
         this.algorithm = 'aes-256-cbc';
-        this.key = jwtConfig.secretcrypto;
+        this.key = process.env.SECRETCRYPTO;
         this.ivLength = 16;
     }
     encrypt(plainText) {
