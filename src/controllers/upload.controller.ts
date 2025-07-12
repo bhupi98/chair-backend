@@ -5,7 +5,7 @@ import { JwtAuthGuard } from 'src/JwtAuthGuard';
 
 
 import { UploadService } from 'src/services/UploadService';
-@UseGuards(JwtAuthGuard) 
+//@UseGuards(JwtAuthGuard) 
 @Controller('api/uploads')
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
